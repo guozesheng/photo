@@ -59,7 +59,7 @@ int fb_init(PFBDEV pfbdev);
 int fb_destroy(PFBDEV pfbdev);
 int fb_memset(void *addr, int c, size_t len);
 int draw_pixel(PFBDEV pfbdev, int x, int y, u32_t color);
-u16_t *jpeg_decode(PFBDEV pfbdev, const char *img_file);
+JPEG_NODE *jpeg_decode(PFBDEV pfbdev, JPEG_NODE *p, const char *img_file);
 int mouse_main(PFBDEV pfbdev);
 FILE_NODE *load_init(FILE_NODE *head, const char *exname, const char *path);
 int load_destroy(FILE_NODE *head);

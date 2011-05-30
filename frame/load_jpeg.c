@@ -12,12 +12,17 @@ JPEG_NODE * jpeg_link_add(PFBDEV pfbdev, JPEG_NODE *head, const char *filename)
     JPEG_NODE *p = head;
 
     tmp = malloc(sizeof(JPEG_NODE));
+
     if(tmp == NULL)
         return NULL;
+
     tmp->pjpeg = jpeg_decode(pfbdev, filename);
     tmp->next = NULL;
+
     if(head == NULL)
+    {
         head = tmp;
+    }
     else
     {
         while(p->next != NULL)

@@ -37,7 +37,7 @@ int rgb24to16(u8_t *buf24, u16_t *buf, JDIMENSION jpeg_width, JDIMENSION jpeg_he
 	return 0;
 }
 
-u16_t *jpeg_decode(PFBDEV pfbdev, const char *img_file)
+JPEG_NODE *jpeg_decode(PFBDEV pfbdev, JPEG_NODE *p, const char *img_file)
 {
     struct jpeg_decompress_struct cinfo;
     struct jpeg_error_mgr jerr;
@@ -102,9 +102,13 @@ u16_t *jpeg_decode(PFBDEV pfbdev, const char *img_file)
     rgb24to16(buffer, buf_16, cinfo.output_width, cinfo.output_height);
     free(buffer);
 
+    p->pjpeg = buf_16;
+    p->jpeg_width = cinfo.output_width;
+    p->jpeg_width = cinfo.output_height;
+
     // End of the TEST
 
     fclose(infile);
-    return buf_16;
+    return p;
 }
 
