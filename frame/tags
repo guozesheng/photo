@@ -1,0 +1,46 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+BORD	mouse.c	11;"	d	file:
+C_HEIGHT	mouse.c	9;"	d	file:
+C_WIDTH	mouse.c	8;"	d	file:
+T___	mouse.c	10;"	d	file:
+X___	mouse.c	12;"	d	file:
+cursor_pixel	mouse.c	/^static u32_t cursor_pixel[C_WIDTH * C_HEIGHT] = $/;"	v	file:
+cursor_save	mouse.c	/^static u32_t cursor_save[C_WIDTH * C_HEIGHT] = {0};$/;"	v	file:
+display_font	font.c	/^int display_font(const char *code,int *len,int x,int y,PFBDEV pfbdev, u32_t color)$/;"	f
+display_jpeg	jpeg_disp.c	/^int display_jpeg(JPEG_FILE *file, PFBDEV pfbdev, int x, int y, int w, int h)$/;"	f
+display_string	font.c	/^int display_string (const char *str, int x, int y, PFBDEV pfbdev,u32_t color)$/;"	f
+draw_pixel	draw.c	/^int draw_pixel(PFBDEV pfbdev, int x, int y, u32_t color)$/;"	f
+face	font.c	/^static FT_Face face;$/;"	v	file:
+fb_destroy	fb.c	/^int fb_destroy(PFBDEV pfbdev)$/;"	f
+fb_init	fb.c	/^int fb_init(PFBDEV pfbdev)$/;"	f
+fb_memset	fb.c	/^int fb_memset(void *addr, int c, size_t len)$/;"	f
+fontfile	font.c	/^static char *fontfile = "font\/simkai.ttf";$/;"	v	file:
+fun_test	mouse_event.c	/^int fun_test(PMOUSEVENT head, int x, int y, int h, int w)$/;"	f
+fun_use	mouse_event.c	/^int fun_use(PMOUSEVENT pevent)$/;"	f
+init_ft	font.c	/^int init_ft (const char *file, int size)$/;"	f
+jpeg_decode	jpeg_decode.c	/^u16_t *jpeg_decode(PFBDEV pfbdev, const char *img_file)$/;"	f
+jpeg_display_zoom	jpeg_disp.c	/^JPEG_FILE *jpeg_display_zoom(JPEG_FILE *file, PFBDEV pfbdev, int w, int h)$/;"	f
+jpeg_file_head	jpeg_load.c	/^    FILE_NODE *jpeg_file_head;$/;"	v
+jpeg_link_add	load_jpeg.c	/^JPEG_FILE * jpeg_link_add(PFBDEV pfbdev, JPEG_FILE *head, const char *filename)$/;"	f
+jpeg_link_destroy	load_jpeg.c	/^int jpeg_link_destroy(JPEG_FILE *head)$/;"	f
+library	font.c	/^static FT_Library library;$/;"	v	file:
+load_cmp	load.c	/^int load_cmp(const char *filename, const char *exname)$/;"	f
+load_cmp_jpeg	load_jpeg.c	/^int load_cmp_jpeg(const char *filename)$/;"	f
+load_init	load.c	/^FILENAME *load_init(FILENAME *head, const char *exname)$/;"	f
+load_init	load_jpeg.c	/^int load_init(PFBDEV pfbdev, JPEG_FILE *head)$/;"	f
+main	main.c	/^int main(int argc, const char *argv[])$/;"	f
+mouse_draw	mouse.c	/^int mouse_draw(PFBDEV pfbdev, int x, int y)$/;"	f
+mouse_loop	mouse.c	/^int mouse_loop = 1;$/;"	v
+mouse_main	mouse.c	/^int mouse_main(PFBDEV pfbdev)$/;"	f
+mouse_parse	mouse.c	/^int mouse_parse(int fd, MEVENT *pmevent)$/;"	f
+mouse_restore	mouse.c	/^int mouse_restore(PFBDEV pfbdev, int x, int y)$/;"	f
+mouse_save	mouse.c	/^int mouse_save(PFBDEV pfbdev, int x, int y)$/;"	f
+print_hello	mouse_event.c	/^int print_hello(char *str, char *str2)$/;"	f
+psize	font.c	/^static int psize = 32;$/;"	v	file:
+rgb24to16	jpeg_decode.c	/^int rgb24to16(u8_t *buf24, u16_t *buf, JDIMENSION jpeg_width, JDIMENSION jpeg_height)$/;"	f
+s_font_utf8_to_unicode	font.c	/^static u16_t s_font_utf8_to_unicode (const unsigned char *utf8, int *len)$/;"	f	file:

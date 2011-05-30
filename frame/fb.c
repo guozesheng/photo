@@ -8,21 +8,21 @@
 #include <string.h>
 #include "main.h"
 
-int fb_init(PFBDEV pFbdev)
+int fb_init(PFBDEV pfbdev)
 {
-    if ((pFbdev->fb = open(pFbdev->dev, O_RDWR)) < 0)
+    if ((pfbdev->fb = open(pfbdev->dev, O_RDWR)) < 0)
     {
         perror("open dev");
         return -1;
     }
 
-    if (ioctl(pFbdev->fb, FBIOGET_VSCREENINFO, &(pFbdev->fb_var)) == -1)
+    if (ioctl(pfbdev->fb, FBIOGET_VSCREENINFO, &(pfbdev->fb_var)) == -1)
     {
         perror("ioctl");
         return -1;
     }
 
-    pFbdev->memo = mmap(NULL, pFbdev->fb_var.xres * pFbdev->fb_var.yres * pFbdev->fb_var.bits_per_pixel / 8, PROT_READ | PROT_WRITE, MAP_SHARED, pFbdev->fb, 0);
+    pfbdev->memo = mmap(NULL, pfbdev->fb_var.xres * pfbdev->fb_var.yres * pfbdev->fb_var.bits_per_pixel / 8, PROT_READ | PROT_WRITE, MAP_SHARED, pfbdev->fb, 0);
     
     return 0;
 }
