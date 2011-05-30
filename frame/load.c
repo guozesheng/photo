@@ -8,10 +8,6 @@
 int load_cmp(const char *filename, const char *exname)
 {
     int i, j;
-    char jpeg_name[] = ".jpg";
-
-    filename = "abcdefg.jpg";
-    exname = ".jpg";
 
     for (i = strlen(filename) - 1, j = strlen(exname) - 1; j >= 0 ; i--, j--) 
     {
@@ -24,8 +20,7 @@ int load_cmp(const char *filename, const char *exname)
     return 0;
 }
 
-FILENAME *load_init(FILENAME *head, const char *exname, const char *path)
-//int load_init(PFBDEV pfbdev, JPEG_FILE *head)
+FILE_NODE *load_init(FILE_NODE *head, const char *exname, const char *path)
 {
     DIR *dp;
 
@@ -34,14 +29,31 @@ FILENAME *load_init(FILENAME *head, const char *exname, const char *path)
     struct dirent *sdir;
     while ((sdir = readdir(dp)) != NULL)
     {
-        if (sdir->d_type == DT_REG) 
+        if (sdir->d_type == DT_REG) // This is a regular file.
         {
-            if (!load_cmp_jpeg(sdir->d_name)) 
+            if (!load_cmp(sdir->d_name, exname)) 
             {
-                printf("%s\n", sdir->d_name);
+                FILE_NODE *p = malloc(sizeof(FILE_NODE));
+                strcpy(p->flname, sdir->d_name);
+                p->next = head;
+                head = p;
             }
         }
     }
     
     return head;
+}
+
+int load_destroy(FILE_NODE *head)
+{
+    FILE_NODE *p;
+
+    while (head != NULL) 
+    {
+        p = head;
+        head = head->next;
+        free(p);
+    }
+    
+    return 0;
 }

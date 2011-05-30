@@ -8,7 +8,7 @@
 #include <unistd.h>
 #include "main.h"
 
-JPEG_NODE *jpeg_display_zoom(JPEG_NODE *file, PFBDEV pfbdev, int w, int h)
+JPEG_NODE *jpeg_display_zoom(PFBDEV pfbdev, JPEG_FILE *file, int w, int h)
 {   
     int i,j;
     int dtw,dth;
@@ -37,7 +37,7 @@ JPEG_NODE *jpeg_display_zoom(JPEG_NODE *file, PFBDEV pfbdev, int w, int h)
 
     return zoomfile;
 }
-int display_jpeg(JPEG_NODE *file, PFBDEV pfbdev, int x, int y, int w, int h)
+int display_jpeg(PFBDEV pfbdev, JPEG_NODE *file, int x, int y, int w, int h)
 {
     JPEG_NODE *zoomfile;
     int i, j;
@@ -54,11 +54,11 @@ int display_jpeg(JPEG_NODE *file, PFBDEV pfbdev, int x, int y, int w, int h)
     return 0;
 }
 
-int slide_display_jpeg(JPEG_NODE *headfile, PFBDEV pfbdev, int second)
+int slide_display_jpeg(PFBDEV pfbdev, JPEG_NODE *headfile, int second)
 {
     JPEG_NODE *pfile;
 
-    pfile = headfile;
+    p = headfile;
     while(NULL != pfile)
     {
         display_jpeg(pfile, pfbdev, 0, 0, pfbdev->fb_var.xres, pfbdev->fb_var.yres);    

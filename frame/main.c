@@ -25,7 +25,6 @@ int main(int argc, const char *argv[])
 
     //end test
 
-    //draw_pixel(&fbdev, 500, 500, 0x0000ff00);
     //mouse_main(&fbdev);
 
     fb_destroy(&fbdev);

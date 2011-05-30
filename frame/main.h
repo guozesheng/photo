@@ -44,15 +44,15 @@ typedef struct jpeg_node
     JDIMENSION jpeg_width;
     JDIMENSION jpeg_height;
 
-    struct node *prev;
-    struct node *next;
-} JPEG_NODE
+    struct jpeg_node *prev;
+    struct jpeg_node *next;
+} JPEG_NODE;
 
 typedef struct file_node
 {
     char flname[4096];
 
-    struct filename *next;
+    struct file_node *next;
 } FILE_NODE;
 
 int fb_init(PFBDEV pfbdev);
@@ -61,13 +61,15 @@ int fb_memset(void *addr, int c, size_t len);
 int draw_pixel(PFBDEV pfbdev, int x, int y, u32_t color);
 u16_t *jpeg_decode(PFBDEV pfbdev, const char *img_file);
 int mouse_main(PFBDEV pfbdev);
-int load_init(PFBDEV pfbdev, JPEG_FILE *head);
+FILE_NODE *load_init(FILE_NODE *head, const char *exname, const char *path);
+int load_destroy(FILE_NODE *head);
 
 /*in font.c*/
 /*display a fong*/
 int display_font(const char *code,int *len,int x,int y,PFBDEV pfbdev, u32_t color);
 /* display string */
 int display_string (const char *str, int x, int y, PFBDEV pfbdev,u32_t color);
-int display_jpeg(JPEG_FILE *file, PFBDEV pfbdev, int x, int y, int w, int h);
+/*int display_jpeg(JPEG_FILE *file, PFBDEV pfbdev, int x, int y, int w, int h);*/
+int slide_display_jpeg(JPEG_NODE *headfile, PFBDEV pfbdev, int second);
 
 #endif
