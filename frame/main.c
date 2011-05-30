@@ -29,6 +29,5 @@ int main(int argc, const char *argv[])
     //mouse_main(&fbdev);
 
     fb_destroy(&fbdev);
-
     return 0;
 }
