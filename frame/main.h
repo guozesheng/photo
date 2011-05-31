@@ -26,22 +26,20 @@ typedef struct mevent
     int button;
 } MEVENT;
 
-typedef struct mousevent
+typedef struct button
 {
-    int x;
-    int y;
-    int h;
-    int w;
+    int button_x;
+    int button_y;
+    int button_height;
+    int button_width;
+    char button_pic[4096];
 
-    void (*function)(void *, ...);
-
-    struct mousevent *next;
-} MOUSEVENT, *PMOUSEVENT;
+    struct button *next;
+} BUTTON, *PBUTTON;
 
 typedef struct jpeg_node
 {
     u32_t *pjpeg;
-    /*u8_t *pjpeg;*/
     JDIMENSION jpeg_width;
     JDIMENSION jpeg_height;
 
