@@ -23,6 +23,7 @@ int load_cmp(const char *filename, const char *exname)
 FILE_NODE *load_init(FILE_NODE *head, const char *exname, const char *path)
 {
     DIR *dp;
+    char name_tmp[4096];
 
     dp = opendir(path);
 
@@ -34,9 +35,14 @@ FILE_NODE *load_init(FILE_NODE *head, const char *exname, const char *path)
             if (!load_cmp(sdir->d_name, exname)) 
             {
                 FILE_NODE *p = malloc(sizeof(FILE_NODE));
-                strcpy(p->flname, sdir->d_name);
-                p->next = head;
-                head = p;
+                if (p != NULL)
+                {
+                    strcpy(name_tmp, path);
+                    strcat(name_tmp, sdir->d_name);
+                    strcpy(p->flname, name_tmp);
+                    p->next = head;
+                    head = p;
+                }
             }
         }
     }

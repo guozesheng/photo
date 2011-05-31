@@ -86,11 +86,11 @@ JPEG_NODE *jpeg_decode(PFBDEV pfbdev, JPEG_NODE *p, const char *img_file)
      * so allocate memory buffer for scanline immediately
      */
     jpeg_start_decompress(&cinfo);
-    if ((cinfo.output_width > pfbdev->fb_var.xres) || (cinfo.output_height > pfbdev->fb_var.yres)) 
-    {
-        printf("Too large JPEG file, cannot display\n");
-        return NULL;
-    }
+    //if ((cinfo.output_width > pfbdev->fb_var.xres) || (cinfo.output_height > pfbdev->fb_var.yres)) 
+    //{
+        //printf("Too large JPEG file, cannot display\n");
+        //return NULL;
+    //}
     lineBuf = cinfo.mem->alloc_sarray ((j_common_ptr) &cinfo, JPOOL_IMAGE, (cinfo.output_width * cinfo.output_components), 1);
     buffer = (u8_t *)malloc(3 * cinfo.output_width * cinfo.output_height);
     if (buffer == NULL) 

@@ -43,7 +43,6 @@ JPEG_NODE *jpeg_display_zoom(JPEG_NODE *file, PFBDEV pfbdev, int w, int h)
 
     zoomfile->pjpeg = malloc(zoomfile->jpeg_width*zoomfile->jpeg_height*pfbdev->fb_var.bits_per_pixel/8);
 
-    printf("%f\n",dt);
     for(j = 0; j < zoomfile->jpeg_height; j++) 
     {
         for(i = 0; i < zoomfile->jpeg_width; i++) 
