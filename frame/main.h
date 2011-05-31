@@ -40,8 +40,8 @@ typedef struct mousevent
 
 typedef struct jpeg_node
 {
-    /*u32_t *pjpeg;*/
-    u8_t *pjpeg;
+    u32_t *pjpeg;
+    /*u8_t *pjpeg;*/
     JDIMENSION jpeg_width;
     JDIMENSION jpeg_height;
 
