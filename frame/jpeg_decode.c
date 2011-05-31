@@ -8,6 +8,21 @@
 #include <time.h>
 #include "main.h"
 
+int rgb24to32(u8_t *buf24, u32_t *buf, JDIMENSION jpeg_width, JDIMENSION jpeg_height)
+{
+    int i;
+
+    for(i = 0; i < jpeg_width * jpeg_height; i++)
+    {
+        *((u8_t *)&buf[i] + 2) = buf24[i * 3 + 0]; 
+        *((u8_t *)&buf[i] + 1) = buf24[i * 3 + 1]; 
+        *((u8_t *)&buf[i] + 0) = buf24[i * 3 + 2]; 
+        *((u8_t *)&buf[i] + 3) = 0x00;
+    }   
+
+    return 0;
+}
+
 int rgb24to16(u8_t *buf24, u16_t *buf, JDIMENSION jpeg_width, JDIMENSION jpeg_height)
 {
     //u16_t *buf16 = NULL;
@@ -57,6 +72,10 @@ JPEG_NODE *jpeg_decode(PFBDEV pfbdev, JPEG_NODE *p, const char *img_file)
     cinfo.err = jpeg_std_error(&jerr);
     jpeg_create_decompress(&cinfo);
 
+    // by XiaoGuo
+    p->jpeg_width = cinfo.output_width;
+    p->jpeg_height = cinfo.output_height;
+
     // bind jpeg decompress object to infile
     jpeg_stdio_src(&cinfo, infile);
 
@@ -70,7 +89,6 @@ JPEG_NODE *jpeg_decode(PFBDEV pfbdev, JPEG_NODE *p, const char *img_file)
      * so allocate memory buffer for scanline immediately
      */
     jpeg_start_decompress(&cinfo);
-    printf("%d, %d\n", cinfo.output_width, cinfo.output_height);
     if ((cinfo.output_width > pfbdev->fb_var.xres) || (cinfo.output_height > pfbdev->fb_var.yres)) 
     {
         printf("Too large JPEG file, cannot display\n");
@@ -92,6 +110,37 @@ JPEG_NODE *jpeg_decode(PFBDEV pfbdev, JPEG_NODE *p, const char *img_file)
             memcpy((buffer + y * cinfo.output_width * 3), lineBuf[0], 3 * cinfo.output_width);
         }
     }
+    else if (cinfo.output_components == 1) 
+    {
+        unsigned int col;
+        int lineOffset = (p->jpeg_width * 3); 
+        int lineBufIndex;
+        int x; 
+        int y;
+
+        for (y = 0; y < cinfo.output_height; y++)
+        {
+            jpeg_read_scanlines (&cinfo, lineBuf, 1); 
+
+            lineBufIndex = 0;
+            for (x = 0; x < lineOffset; x++) 
+            {
+                col = lineBuf[0][lineBufIndex];
+
+                buffer[(lineOffset * y) + x] = col;
+                x++;
+                buffer[(lineOffset * y) + x] = col;
+                x++;
+                buffer[(lineOffset * y) + x] = col;
+
+                lineBufIndex++;
+            }    
+        }   
+    }
+    else 
+    {
+        return NULL;
+    }
 
     // finish decompress, destroy decompress object
     jpeg_finish_decompress(&cinfo);
@@ -99,14 +148,14 @@ JPEG_NODE *jpeg_decode(PFBDEV pfbdev, JPEG_NODE *p, const char *img_file)
 
     // the flow is only for TEST
     
+    void *buf = malloc(cinfo.output_width * cinfo.output_height * pfbdev->fb_var.bits_per_pixel / 8); 
     //u16_t *buf_16 = malloc(pfbdev->fb_var.xres * pfbdev->fb_var.yres * pfbdev->fb_var.bits_per_pixel / 8); 
-    u16_t *buf_16 = malloc(cinfo.output_width * cinfo.output_height * pfbdev->fb_var.bits_per_pixel / 8); 
-    rgb24to16(buffer, buf_16, cinfo.output_width, cinfo.output_height);
+    //u32_t *buf_32 = malloc(cinfo.output_width * cinfo.output_height * pfbdev->fb_var.bits_per_pixel / 8); 
+    //rgb24to16(buffer, buf_32, cinfo.output_width, cinfo.output_height);
+    rgb24to32(buffer, buf, cinfo.output_width, cinfo.output_height);
     free(buffer);
 
-    p->pjpeg = buf_16;
-    p->jpeg_width = cinfo.output_width;
-    p->jpeg_height = cinfo.output_height;
+    p->pjpeg = buf;
 
     // End of the TEST
 
