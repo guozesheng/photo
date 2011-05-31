@@ -72,9 +72,6 @@ JPEG_NODE *jpeg_decode(PFBDEV pfbdev, JPEG_NODE *p, const char *img_file)
     cinfo.err = jpeg_std_error(&jerr);
     jpeg_create_decompress(&cinfo);
 
-    // by XiaoGuo
-    p->jpeg_width = cinfo.output_width;
-    p->jpeg_height = cinfo.output_height;
 
     // bind jpeg decompress object to infile
     jpeg_stdio_src(&cinfo, infile);
@@ -156,6 +153,10 @@ JPEG_NODE *jpeg_decode(PFBDEV pfbdev, JPEG_NODE *p, const char *img_file)
     free(buffer);
 
     p->pjpeg = buf;
+
+    // by XiaoGuo
+    p->jpeg_width = cinfo.output_width;
+    p->jpeg_height = cinfo.output_height;
 
     // End of the TEST
 

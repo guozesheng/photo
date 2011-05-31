@@ -44,7 +44,7 @@ JPEG_NODE *jpeg_display_zoom(JPEG_NODE *file, PFBDEV pfbdev, int w, int h)
     //printf("z %d %d\n",zoomfile->jpeg_height,zoomfile->jpeg_width);
     //printf("fb %d %d\n",pfbdev->fb_var.yres,pfbdev->fb_var.xres);
 
-    zoomfile->pjpeg = malloc(zoomfile->jpeg_width*zoomfile->jpeg_height*2);
+    zoomfile->pjpeg = malloc(zoomfile->jpeg_width*zoomfile->jpeg_height*pfbdev->fb_var.bits_per_pixel/8);
 
 
     for(j = 0; j < file->jpeg_height; j++) 
@@ -68,6 +68,14 @@ int display_jpeg(JPEG_NODE *file, PFBDEV pfbdev, int x, int y, int w, int h)
         for (j = 0; j < zoomfile->jpeg_width; ++j)
         {
             draw_pixel(pfbdev, j, i, zoomfile->pjpeg[j + i*(zoomfile->jpeg_width)]);
+        }
+    }
+
+    for(i = 0; i < file->jpeg_height; ++i)
+    {
+        for (j = 0; j < file->jpeg_width; ++j)
+        {
+            draw_pixel(pfbdev, j, i, file->pjpeg[j + i*(file->jpeg_width)]);
         }
     }
 
