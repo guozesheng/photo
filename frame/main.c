@@ -1,10 +1,15 @@
 #include <stdio.h>
 #include <string.h>
+#include <pthread.h>
 #include "main.h"
+
+MEVENT mevent;
+pthread_mutex_t mouse_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 int main(int argc, const char *argv[])
 {
     FBDEV fbdev;
+    pthread_t t_mouse_id;
 
     strcpy(fbdev.dev, "/dev/fb0");
 
@@ -13,27 +18,11 @@ int main(int argc, const char *argv[])
         return -1;
     }
 
+    pthread_create(&t_mouse_id, NULL, (void *)mouse_main, (void *)&fbdev);
+
     JPEG_NODE *jpeg_head = NULL;
     jpeg_head = jpeg_create_link(&fbdev, jpeg_head, "../pic/");
     slide_display_jpeg(jpeg_head, &fbdev, 1);
-
-    //test
-    //int i, j;
-    //for (i = 0; i < 30; i++) 
-    //{
-        //for (j = 0; j < 100; j++) 
-        //{
-            //draw_pixel(&fbdev, 200+i, 200+j, 0x00ff0000);
-        //}
-    //}
-    //for (j = 0; j < 500; j++) 
-    //{
-        //draw_pixel(&fbdev, 200, 200 + j, 0xff);
-    //}
-
-    //end test
-
-    //mouse_main(&fbdev);
 
     fb_destroy(&fbdev);
     return 0;

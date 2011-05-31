@@ -77,8 +77,12 @@ int slide_display_jpeg(JPEG_NODE *headfile, PFBDEV pfbdev, int second)
     JPEG_NODE *pfile;
 
     pfile = headfile;
-    while(NULL != pfile)
+    while(1)
     {
+        if (pfile == NULL) 
+        {
+            pfile = headfile;
+        }
         display_jpeg(pfile, pfbdev, 0, 0, pfbdev->fb_var.xres, pfbdev->fb_var.yres);    
         display_jpeg(pfile, pfbdev, 0, 0, 200, 100);    
         pfile = pfile->next;

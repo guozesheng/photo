@@ -12,7 +12,7 @@ CC = gcc
 #CFLAGS = -Wall -g -c -I../jpeg/ -I../freetype/include
 CFLAGS = -Wall -g -c 
 #LDFLAGS = -L../jpeg/.libs/ -ljpeg -L../freetype/objs/.libs -lfreetype
-LDFLAGS = -ljpeg -lfreetype
+LDFLAGS = -ljpeg -lfreetype -lpthread
 
 all: $(target)
 

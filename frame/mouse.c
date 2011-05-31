@@ -32,7 +32,8 @@ static u32_t cursor_pixel[C_WIDTH * C_HEIGHT] =
     T___,T___,T___,T___,T___,T___,BORD,BORD,T___,T___
 };/*}}}*/
 static u32_t cursor_save[C_WIDTH * C_HEIGHT] = {0};
-int mouse_loop = 1;
+extern MEVENT mevent;
+extern pthread_mutex_t mouse_mutex;
 
 int mouse_draw(PFBDEV pfbdev, int x, int y);
 int mouse_parse(int fd, MEVENT *pmevent);
@@ -50,45 +51,35 @@ int mouse_main(PFBDEV pfbdev)
         return -1;
     }
 
-    MEVENT mevent;
-    int m_x = pfbdev->fb_var.xres / 2;
-    int m_y = pfbdev->fb_var.yres / 2;
+    mevent.m_x = pfbdev->fb_var.xres / 2;
+    mevent.m_y = pfbdev->fb_var.yres / 2;
 
-    mouse_draw(pfbdev, m_x, m_y);
+    mouse_draw(pfbdev, mevent.m_x, mevent.m_y);
 
-    while (mouse_loop) 
+    pthread_mutex_lock(&mouse_mutex);
+    while (1) 
     {
         if (mouse_parse(fd, &mevent) == 0) 
         {
-            mouse_restore(pfbdev, m_x, m_y);
+            mouse_restore(pfbdev, mevent.m_x, mevent.m_y);
 
-            m_x += mevent.dx;
-            m_y += mevent.dy;
-            m_x = (m_x < 0) ? 0 : m_x;
-            m_y = (m_y < 0) ? 0 : m_y;
-            m_x = (m_x > pfbdev->fb_var.xres - C_WIDTH) ? pfbdev->fb_var.xres - C_WIDTH : m_x;
-            m_y = (m_y > pfbdev->fb_var.yres - C_HEIGHT) ? pfbdev->fb_var.yres - C_HEIGHT : m_y;
+            mevent.m_x += mevent.dx;
+            mevent.m_y += mevent.dy;
+            mevent.m_x = (mevent.m_x < 0) ? 0 : mevent.m_x;
+            mevent.m_y = (mevent.m_y < 0) ? 0 : mevent.m_y;
+            mevent.m_x = (mevent.m_x > pfbdev->fb_var.xres - C_WIDTH) ? pfbdev->fb_var.xres - C_WIDTH : mevent.m_x;
+            mevent.m_y = (mevent.m_y > pfbdev->fb_var.yres - C_HEIGHT) ? pfbdev->fb_var.yres - C_HEIGHT : mevent.m_y;
 
-            mouse_draw(pfbdev, m_x, m_y);
+            mouse_draw(pfbdev, mevent.m_x, mevent.m_y);
             switch (mevent.button)
             {
-                case 1:
-                    printf("Left click!\n");
-                    if (m_x>200 && m_x<230 && m_y>200 && m_y<300) 
-                    {
-                        mouse_loop = 0;
-                    }
-                    break;
-                case 2:
-                    printf("Right click!\n");
-                    break;
-                case 4:
-                    printf("middle click!\n");
+                case 0:
+                    mevent.flag = mevent.button;
+                    mevent.button = 0;
                     break;
                 default: break;
             }
         }
-        usleep(1000);
     }
     
     close(fd);

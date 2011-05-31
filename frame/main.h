@@ -22,6 +22,9 @@ typedef struct mevent
     int dx;
     int dy;
     int dz;
+    int m_x;
+    int m_y;
+    int flag;
 
     int button;
 } MEVENT;
