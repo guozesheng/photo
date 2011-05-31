@@ -64,6 +64,8 @@ int mouse_main(PFBDEV pfbdev);
 FILE_NODE *load_init(FILE_NODE *head, const char *exname, const char *path);
 int load_destroy(FILE_NODE *head);
 
+JPEG_NODE *jpeg_create_link(PFBDEV pfbdev, JPEG_NODE *jpeg_head, const char *path);
+
 /*in font.c*/
 /*display a fong*/
 int display_font(const char *code,int *len,int x,int y,PFBDEV pfbdev, u32_t color);

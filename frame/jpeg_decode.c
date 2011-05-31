@@ -70,6 +70,7 @@ JPEG_NODE *jpeg_decode(PFBDEV pfbdev, JPEG_NODE *p, const char *img_file)
      * so allocate memory buffer for scanline immediately
      */
     jpeg_start_decompress(&cinfo);
+    printf("%d, %d\n", cinfo.output_width, cinfo.output_height);
     if ((cinfo.output_width > pfbdev->fb_var.xres) || (cinfo.output_height > pfbdev->fb_var.yres)) 
     {
         printf("Too large JPEG file, cannot display\n");
@@ -98,13 +99,14 @@ JPEG_NODE *jpeg_decode(PFBDEV pfbdev, JPEG_NODE *p, const char *img_file)
 
     // the flow is only for TEST
     
-    u16_t *buf_16 = malloc(pfbdev->fb_var.xres * pfbdev->fb_var.yres * pfbdev->fb_var.bits_per_pixel / 8); 
+    //u16_t *buf_16 = malloc(pfbdev->fb_var.xres * pfbdev->fb_var.yres * pfbdev->fb_var.bits_per_pixel / 8); 
+    u16_t *buf_16 = malloc(cinfo.output_width * cinfo.output_height * pfbdev->fb_var.bits_per_pixel / 8); 
     rgb24to16(buffer, buf_16, cinfo.output_width, cinfo.output_height);
     free(buffer);
 
     p->pjpeg = buf_16;
     p->jpeg_width = cinfo.output_width;
-    p->jpeg_width = cinfo.output_height;
+    p->jpeg_height = cinfo.output_height;
 
     // End of the TEST
 

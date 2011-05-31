@@ -31,4 +31,4 @@ test:
 	@echo $(src)
 	@echo $(obj)
 run:
-	./main test.jpg
+	./main

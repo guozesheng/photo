@@ -11,27 +11,47 @@
 JPEG_NODE *jpeg_display_zoom(JPEG_NODE *file, PFBDEV pfbdev, int w, int h)
 {   
     int i,j;
-    int dtw,dth;
+    //int dtw,dth;
 
     if(NULL == file) 
     {
        return NULL; 
     }
-     
-    JPEG_NODE *zoomfile = malloc(w*h*2);
+    JPEG_NODE *zoomfile = malloc(sizeof(JPEG_NODE));
+   
+    //zoomfile->pjpeg = malloc(w*h*2);
+    //zoomfile->jpeg_width = w;
+    //zoomfile->jpeg_height = h;
 
-    zoomfile->jpeg_width = w;
-    zoomfile->jpeg_height = h;
-    zoomfile->next = NULL;
+    //for(j = 0; j < h; j++) 
+    //{
+        //for(i = 0; i < w; i++) 
+        //{
+            //dtw = i*file->jpeg_width/w;
+            //dth = j*file->jpeg_height/h;
+            //zoomfile->pjpeg[i+j*w] = file->pjpeg[dtw+dth*file->jpeg_width];
+        //}
+    //}
     
-    for(j = 0; j < h; j++) 
+    double dt, dw ,dh;
+    dw = (double)file->jpeg_width/(double)w;
+    dh = (double)file->jpeg_height/(double)h;
+    dt = dw>dh?dw:dh;
+    zoomfile->jpeg_width = (double)file->jpeg_width/dt;
+    zoomfile->jpeg_height = (double)file->jpeg_height/dt;
+
+    //printf("fi %d %d\n",file->jpeg_height,file->jpeg_width);
+    //printf("z %d %d\n",zoomfile->jpeg_height,zoomfile->jpeg_width);
+    //printf("fb %d %d\n",pfbdev->fb_var.yres,pfbdev->fb_var.xres);
+
+    zoomfile->pjpeg = malloc(zoomfile->jpeg_width*zoomfile->jpeg_height*2);
+
+
+    for(j = 0; j < file->jpeg_height; j++) 
     {
-        for(i = 0; i < w; i++) 
+        for(i = 0; i < file->jpeg_width; i++) 
         {
-            dtw = i*file->jpeg_width/w;
-            dth = i*file->jpeg_height/h;
-            dtw = dtw<dth?dtw:dth;
-            zoomfile->pjpeg[i+j*w] = file->pjpeg[dtw+dtw*file->jpeg_width];
+            zoomfile->pjpeg[(int)(i/dt)+(int)(j/dt)*zoomfile->jpeg_width] = file->pjpeg[i+j*file->jpeg_width];
         }
     }
 
@@ -42,12 +62,12 @@ int display_jpeg(JPEG_NODE *file, PFBDEV pfbdev, int x, int y, int w, int h)
     JPEG_NODE *zoomfile;
     int i, j;
 
-    for(i = 0; i < pfbdev->fb_var.yres; ++i)
+    zoomfile = jpeg_display_zoom(file, pfbdev, w, h);
+    for(i = 0; i < zoomfile->jpeg_height; ++i)
     {
-        for (j = 0; j < pfbdev->fb_var.xres; ++j)
+        for (j = 0; j < zoomfile->jpeg_width; ++j)
         {
-            zoomfile = jpeg_display_zoom(file, pfbdev, w, h);
-            draw_pixel(pfbdev, j, i, zoomfile->pjpeg[j + i*(pfbdev->fb_var.xres)]);
+            draw_pixel(pfbdev, j, i, zoomfile->pjpeg[j + i*(zoomfile->jpeg_width)]);
         }
     }
 
@@ -62,6 +82,8 @@ int slide_display_jpeg(JPEG_NODE *headfile, PFBDEV pfbdev, int second)
     while(NULL != pfile)
     {
         display_jpeg(pfile, pfbdev, 0, 0, pfbdev->fb_var.xres, pfbdev->fb_var.yres);    
+        //display_jpeg(pfile, pfbdev, 0, 0, 200, 100);    
+        pfile = pfile->next;
         sleep(second);
     }
     return 0;
