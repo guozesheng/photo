@@ -146,10 +146,20 @@ JPEG_NODE *jpeg_decode(PFBDEV pfbdev, JPEG_NODE *p, const char *img_file)
     // the flow is only for TEST
     
     void *buf = malloc(cinfo.output_width * cinfo.output_height * pfbdev->fb_var.bits_per_pixel / 8); 
-    //u16_t *buf_16 = malloc(pfbdev->fb_var.xres * pfbdev->fb_var.yres * pfbdev->fb_var.bits_per_pixel / 8); 
-    //u32_t *buf_32 = malloc(cinfo.output_width * cinfo.output_height * pfbdev->fb_var.bits_per_pixel / 8); 
-    //rgb24to16(buffer, buf_32, cinfo.output_width, cinfo.output_height);
-    rgb24to32(buffer, buf, cinfo.output_width, cinfo.output_height);
+
+    if (pfbdev->fb_var.bits_per_pixel == 32) 
+    {
+        rgb24to32(buffer, buf, cinfo.output_width, cinfo.output_height);
+    }
+    else if (pfbdev->fb_var.bits_per_pixel == 16) 
+    {
+        rgb24to16(buffer, buf, cinfo.output_width, cinfo.output_height);
+    }
+    else 
+    {
+        return NULL;
+    }
+
     free(buffer);
 
     p->pjpeg = buf;
