@@ -56,7 +56,7 @@ int mouse_main(PFBDEV pfbdev)
 
     mouse_draw(pfbdev, mevent.m_x, mevent.m_y);
 
-    pthread_mutex_lock(&mouse_mutex);
+    //pthread_mutex_lock(&mouse_mutex);
     while (1) 
     {
         if (mouse_parse(fd, &mevent) == 0) 

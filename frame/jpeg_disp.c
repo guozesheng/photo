@@ -90,3 +90,27 @@ int slide_display_jpeg(JPEG_NODE *headfile, PFBDEV pfbdev, int second)
     }
     return 0;
 }
+
+int jpeg_thumb_disp(PFBDEV pfbdev, JPEG_NODE *headfile, int middle, int mov) // By XiaoGuo@0601:1911
+{   // mov: -1:left; 1:right; 0:none
+    float elemt = 6.0;
+    float varpix = pfbdev->fb_var.xres / elemt;
+    int middle_x, middle_y;
+
+    //int display_jpeg(JPEG_NODE *file, PFBDEV pfbdev, int x, int y, int w, int h)
+    display_jpeg(headfile, pfbdev);
+    
+    return 0;
+}
+
+int jpeg_thumb(PFBDEV pfbdev, JPEG_NODE *headfile, int start, int len) // By XiaoGuo@0601:1911
+{
+    int i;
+    JPEG_NODE *pfile = headfile;
+
+    while ((i != start) && (pfile != NULL)) 
+    {
+    }
+
+    return 0;
+}
