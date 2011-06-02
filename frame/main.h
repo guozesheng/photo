@@ -5,6 +5,8 @@
 #include <linux/fb.h>
 #include <jpeglib.h>
 
+#define GRAY 0x00222222
+
 typedef unsigned char u8_t;
 typedef unsigned short u16_t;
 typedef unsigned int u32_t;
@@ -61,6 +63,7 @@ int fb_init(PFBDEV pfbdev);
 int fb_destroy(PFBDEV pfbdev);
 int fb_memset(void *addr, int c, size_t len);
 int draw_pixel(PFBDEV pfbdev, int x, int y, u32_t color);
+int draw_rectangle(PFBDEV pfbdev, int x, int y, int w, int h, u32_t color);
 JPEG_NODE *jpeg_decode(PFBDEV pfbdev, JPEG_NODE *p, const char *img_file);
 int mouse_main(PFBDEV pfbdev);
 FILE_NODE *load_init(FILE_NODE *head, const char *exname, const char *path);
@@ -75,5 +78,8 @@ int display_font(const char *code,int *len,int x,int y,PFBDEV pfbdev, u32_t colo
 int display_string (const char *str, int x, int y, PFBDEV pfbdev,u32_t color);
 /*int display_jpeg(JPEG_FILE *file, PFBDEV pfbdev, int x, int y, int w, int h);*/
 int slide_display_jpeg(JPEG_NODE *headfile, PFBDEV pfbdev, int second);
+
+// XiaoGuo TEST
+int jpeg_thumb_disp(PFBDEV pfbdev, JPEG_NODE *headfile, int middle, int mov);
 
 #endif

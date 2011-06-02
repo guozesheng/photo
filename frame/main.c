@@ -22,7 +22,8 @@ int main(int argc, const char *argv[])
 
     JPEG_NODE *jpeg_head = NULL;
     jpeg_head = jpeg_create_link(&fbdev, jpeg_head, "../pic/");
-    slide_display_jpeg(jpeg_head, &fbdev, 1);
+    //slide_display_jpeg(jpeg_head, &fbdev, 1);
+    jpeg_thumb_disp(&fbdev, jpeg_head, 0, 0);
 
     fb_destroy(&fbdev);
     return 0;

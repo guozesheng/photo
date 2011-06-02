@@ -25,3 +25,18 @@ int draw_pixel(PFBDEV pfbdev, int x, int y, u32_t color)
     
     return -1;
 }
+
+int draw_rectangle(PFBDEV pfbdev, int x, int y, int w, int h, u32_t color)
+{
+    int i, j;
+
+    for (j = 0; j < h; j++) 
+    {
+        for (i = 0; i < w; i++) 
+        {
+            draw_pixel(pfbdev, x+i, y+j, color);
+        }
+    }
+    
+    return 0;
+}
