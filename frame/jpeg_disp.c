@@ -91,13 +91,14 @@ int slide_display_jpeg(JPEG_NODE *headfile, PFBDEV pfbdev, int second)
     return 0;
 }
 
+ /*
 int jpeg_thumb_disp(PFBDEV pfbdev, JPEG_NODE *headfile, int middle, int mov) // By XiaoGuo@0601:1911
 {   // mov: -1:left; 1:right; 0:none
     int thum_num = 4;                           // The number of the thumbnail
     float elemt = 6.0;                          // the number of copies to split the wide
     float times = 0.714;                        // zoom levels
     float thumbw = pfbdev->fb_var.xres / elemt; // The width of the thumbnail
-    float thumbw_space = thumbw / 7;            // The width of the space
+    float thumbw_space = thumbw / 14;            // The width of the space
     float thumbw_button = thumbw / 2;           // The width of the button
     float thumbh = pfbdev->fb_var.yres / elemt; // The height of the thumbnail
     float thumby = pfbdev->fb_var.yres - thumbh - thumbw_space; // The y coordinate of the thumbnail
@@ -122,6 +123,56 @@ int jpeg_thumb_disp(PFBDEV pfbdev, JPEG_NODE *headfile, int middle, int mov) // 
         display_jpeg(pthumb, pfbdev, thumbx, thumby, thumbw, thumbh);
         pthumb = pthumb->next;
     }
+
+    display_jpeg(headfile, pfbdev, middlex, middley, middlew, middleh);
+    
+    return 0;
+}
+// */
+
+int jpeg_thumb_disp(PFBDEV pfbdev, JPEG_NODE *headfile, int middle, int mov) // By XiaoGuo@0601:1911
+{   // mov: -1:left; 1:right; 0:none
+    //int thum_num = 4;                             // The number of the thumbnail
+    float times = 0.75;                           // zoom levels
+    float times_space = 20.0;                     // space zoom levels
+    float thumbw;                                 // The width of the thumbnail
+    float space;                                  // The width of the space
+    float thumbw_button;                          // The width of the button
+    float thumbh;                                 // The height of the thumbnail
+    float thumby;                                 // The y coordinate of the thumbnail
+    int middlex, middley, middlew, middleh;
+    //JPEG_NODE *pthumb = headfile;
+    //int i, thumbx;
+
+    // space
+    space = pfbdev->fb_var.yres / times_space;
+
+    // middle
+    middlew = pfbdev->fb_var.xres * times;
+    middleh = pfbdev->fb_var.yres * times;
+
+    middlex = (pfbdev->fb_var.xres - middlew) / 2;
+    middley = space;
+
+    //thumbnail
+    thumbh = pfbdev->fb_var.yres - 4 * times_space - middleh;
+    thumbw = pfbdev->fb_var.xres / (pfbdev->fb_var.yres / thumbh);
+    thumby = pfbdev->fb_var.yres - space - thumbh;
+    thumbw_button = thumbw / 3;
+
+    // The background of the thumbnail
+    //draw_rectangle(pfbdev, 0, thumby, pfbdev->fb_var.xres-1, thumbh, GRAY);
+    draw_rectangle(pfbdev, 0, 300, pfbdev->fb_var.xres-1, thumbh, GRAY);
+    //draw_rectangle(pfbdev, thumbw_space, thumby, thumbw_button, thumbh, 0x00440000);
+    //draw_rectangle(pfbdev, pfbdev->fb_var.xres - thumbw_space - thumbw_button, thumby, thumbw_button, thumbh, 0x00440000);
+
+    //for (i = 0; i < thum_num && headfile != NULL; i++) 
+    //{
+        ////thumbx = thumbw_space + thumbw_button + thumbw + (thumbw_space + thumbw) * i;
+        //thumbx = thumbw_space + thumbw_button + thumbw_space + (thumbw_space + thumbw) * i;
+        //display_jpeg(pthumb, pfbdev, thumbx, thumby, thumbw, thumbh);
+        //pthumb = pthumb->next;
+    //}
 
     display_jpeg(headfile, pfbdev, middlex, middley, middlew, middleh);
     
