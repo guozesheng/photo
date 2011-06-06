@@ -134,7 +134,7 @@ int jpeg_thumb_disp(PFBDEV pfbdev, JPEG_NODE *headfile, int middle, int mov) // 
 {   // mov: -1:left; 1:right; 0:none
     //int thum_num = 4;                             // The number of the thumbnail
     float times = 0.75;                           // zoom levels
-    float times_space = 20.0;                     // space zoom levels
+    float times_space = 80.0;                     // space zoom levels
     float thumbw;                                 // The width of the thumbnail
     float space;                                  // The width of the space
     float thumbw_button;                          // The width of the button
@@ -150,19 +150,30 @@ int jpeg_thumb_disp(PFBDEV pfbdev, JPEG_NODE *headfile, int middle, int mov) // 
     // middle
     middlew = pfbdev->fb_var.xres * times;
     middleh = pfbdev->fb_var.yres * times;
-
-    middlex = (pfbdev->fb_var.xres - middlew) / 2;
+    if (headfile->jpeg_width*times < middlew) 
+    {
+        middlex = (pfbdev->fb_var.xres - headfile->jpeg_width * times) / 2;
+    }
+    else 
+    {
+        middlex = (pfbdev->fb_var.xres - middlew) / 2;
+    }
     middley = space;
 
     //thumbnail
-    thumbh = pfbdev->fb_var.yres - 4 * times_space - middleh;
+    thumby = 3 * space + middleh;
+    thumbh = pfbdev->fb_var.yres - thumby - space;
+    //thumbh = pfbdev->fb_var.yres - 4 * space - middleh;
     thumbw = pfbdev->fb_var.xres / (pfbdev->fb_var.yres / thumbh);
-    thumby = pfbdev->fb_var.yres - space - thumbh;
+    //thumby = pfbdev->fb_var.yres - space - thumbh;
     thumbw_button = thumbw / 3;
+    //printf("yres:%d, space:%f, middleh:%d, thumbh:%f, thumby:%f\n", pfbdev->fb_var.yres, space, middleh, thumbh,thumby);
+    draw_rectangle(pfbdev, 0, 0, 1024, 768, 0x0000ff00);
+    //draw_rectangle(pfbdev, 0, thumby, pfbdev->fb_var.xres-1, space, 0x00ff0000);
 
     // The background of the thumbnail
     //draw_rectangle(pfbdev, 0, thumby, pfbdev->fb_var.xres-1, thumbh, GRAY);
-    draw_rectangle(pfbdev, 0, 300, pfbdev->fb_var.xres-1, thumbh, GRAY);
+    draw_rectangle(pfbdev, 0, thumby, pfbdev->fb_var.xres, thumbh, GRAY);
     //draw_rectangle(pfbdev, thumbw_space, thumby, thumbw_button, thumbh, 0x00440000);
     //draw_rectangle(pfbdev, pfbdev->fb_var.xres - thumbw_space - thumbw_button, thumby, thumbw_button, thumbh, 0x00440000);
 
